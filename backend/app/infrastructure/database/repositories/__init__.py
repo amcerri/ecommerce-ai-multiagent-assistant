@@ -26,6 +26,10 @@ from app.infrastructure.database.repositories.analytics_repo import (
     AnalyticsRepository,
     PostgreSQLAnalyticsRepository,
 )
+from app.infrastructure.database.repositories.commerce_repo import (
+    CommerceRepository,
+    PostgreSQLCommerceRepository,
+)
 from app.infrastructure.database.repositories.knowledge_repo import (
     KnowledgeRepository,
     PostgreSQLKnowledgeRepository,
@@ -36,5 +40,7 @@ __all__ = [
     "PostgreSQLKnowledgeRepository",
     "AnalyticsRepository",
     "PostgreSQLAnalyticsRepository",
+    "CommerceRepository",
+    "PostgreSQLCommerceRepository",
 ]
 
