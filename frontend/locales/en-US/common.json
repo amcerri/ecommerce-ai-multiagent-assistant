@@ -1,0 +1,33 @@
+{
+  "app": {
+    "name": "Multi-Agent AI Assistant",
+    "description": "Intelligent assistant system for e-commerce"
+  },
+  "nav": {
+    "chat": "Chat",
+    "knowledge": "Knowledge Base",
+    "analytics": "Analytics",
+    "documents": "Documents",
+    "settings": "Settings"
+  },
+  "language": {
+    "pt-BR": "Portuguese (Brazil)",
+    "en-US": "English (US)",
+    "es-ES": "Spanish",
+    "fr-FR": "French",
+    "de-DE": "German",
+    "autoDetect": "Detect automatically"
+  },
+  "button": {
+    "send": "Send",
+    "cancel": "Cancel",
+    "save": "Save",
+    "close": "Close"
+  },
+  "error": {
+    "generic": "An error occurred",
+    "network": "Connection error"
+  },
+  "loading": "Loading..."
+}
+

@@ -28,6 +28,8 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import i18n from "@/lib/i18n/config";
+import { detectLanguage as detectLanguageUtil } from "@/lib/i18n/detector";
 
 interface LanguageState {
   // State
@@ -57,6 +59,8 @@ export const useLanguageStore = create<LanguageState>()(
       // Actions
       setLanguage: (language: string) => {
         set({ language });
+        // Update i18next language
+        i18n.changeLanguage(language);
         get().saveLanguage();
       },
 
@@ -70,65 +74,29 @@ export const useLanguageStore = create<LanguageState>()(
 
       detectLanguage: async () => {
         try {
-          // Try IP geolocation first (geojs.io - free, no API key)
-          let detectedLang: string | null = null;
-
-          try {
-            const geoResponse = await fetch("https://get.geojs.io/v1/ip/country.json");
-            if (geoResponse.ok) {
-              const geoData = await geoResponse.json();
-              const country = geoData.country?.toLowerCase();
-
-              // Map country to language
-              if (country === "br") {
-                detectedLang = "pt-BR";
-              } else if (country === "us" || country === "gb" || country === "ca" || country === "au") {
-                detectedLang = "en-US";
-              } else if (country === "es" || country === "mx" || country === "ar") {
-                detectedLang = "es-ES";
-              } else if (country === "fr") {
-                detectedLang = "fr-FR";
-              } else if (country === "de" || country === "at" || country === "ch") {
-                detectedLang = "de-DE";
-              }
-            }
-          } catch (error) {
-            console.warn("IP geolocation failed, trying browser language:", error);
-          }
-
-          // Fallback to browser language
-          if (!detectedLang) {
-            const browserLang = navigator.language || (navigator as any).userLanguage;
-            if (browserLang) {
-              if (browserLang.startsWith("pt")) {
-                detectedLang = "pt-BR";
-              } else if (browserLang.startsWith("en")) {
-                detectedLang = "en-US";
-              } else if (browserLang.startsWith("es")) {
-                detectedLang = "es-ES";
-              } else if (browserLang.startsWith("fr")) {
-                detectedLang = "fr-FR";
-              } else if (browserLang.startsWith("de")) {
-                detectedLang = "de-DE";
-              }
-            }
-          }
-
-          // Final fallback to default
-          if (!detectedLang) {
-            detectedLang = DEFAULT_LANGUAGE;
-          }
+          // Use detector utility (IP geolocation + browser)
+          const detectedLang = await detectLanguageUtil();
 
           set({
             detectedLanguage: detectedLang,
             language: get().autoDetect ? detectedLang : get().language,
           });
+
+          // Update i18next if auto-detect is enabled
+          if (get().autoDetect) {
+            i18n.changeLanguage(detectedLang);
+          }
         } catch (error) {
           console.error("Failed to detect language:", error);
           set({
             detectedLanguage: DEFAULT_LANGUAGE,
             language: get().autoDetect ? DEFAULT_LANGUAGE : get().language,
           });
+
+          // Update i18next to default if auto-detect is enabled
+          if (get().autoDetect) {
+            i18n.changeLanguage(DEFAULT_LANGUAGE);
+          }
         }
       },
 
@@ -140,16 +108,30 @@ export const useLanguageStore = create<LanguageState>()(
           if (saved) {
             const parsed = JSON.parse(saved);
             if (parsed.state) {
+              const loadedLanguage = parsed.state.language || DEFAULT_LANGUAGE;
               set(parsed.state);
+              // Update i18next with loaded language
+              i18n.changeLanguage(loadedLanguage);
             }
+          } else {
+            // No saved language, use i18next detected language or default
+            const i18nLanguage = i18n.language || DEFAULT_LANGUAGE;
+            set({ language: i18nLanguage });
+            i18n.changeLanguage(i18nLanguage);
           }
 
           // Auto-detect if enabled
           if (get().autoDetect && !get().detectedLanguage) {
             await get().detectLanguage();
+          } else if (!get().autoDetect) {
+            // Ensure i18next matches store language
+            i18n.changeLanguage(get().language);
           }
         } catch (error) {
           console.error("Failed to load language:", error);
+          // Fallback to default
+          set({ language: DEFAULT_LANGUAGE });
+          i18n.changeLanguage(DEFAULT_LANGUAGE);
         }
       },
 

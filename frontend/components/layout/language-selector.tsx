@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Globe, Check } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +20,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useLanguageStore } from "@/lib/store";
 
 const languages = [
   { code: "pt-BR", name: "Português (Brasil)", native: "Português" },
@@ -29,36 +31,24 @@ const languages = [
 ];
 
 export function LanguageSelector() {
-  const [currentLanguage, setCurrentLanguage] = useState("pt-BR");
-  const [autoDetect, setAutoDetect] = useState(true);
+  const { t } = useTranslation("common");
+  const { language, autoDetect, setLanguage, setAutoDetect, loadLanguage } =
+    useLanguageStore();
 
   useEffect(() => {
-    // Load saved preferences from localStorage
-    const savedLanguage = localStorage.getItem("language");
-    const savedAutoDetect = localStorage.getItem("autoDetect");
-
-    if (savedLanguage) {
-      setCurrentLanguage(savedLanguage);
-    }
-    if (savedAutoDetect !== null) {
-      setAutoDetect(savedAutoDetect === "true");
-    }
-  }, []);
+    // Load language preferences on mount
+    loadLanguage();
+  }, [loadLanguage]);
 
   const handleLanguageChange = (languageCode: string) => {
-    setCurrentLanguage(languageCode);
-    localStorage.setItem("language", languageCode);
-    // TODO: Update i18n context when implemented
+    setLanguage(languageCode);
   };
 
   const handleAutoDetectToggle = () => {
-    const newValue = !autoDetect;
-    setAutoDetect(newValue);
-    localStorage.setItem("autoDetect", String(newValue));
-    // TODO: Update i18n context when implemented
+    setAutoDetect(!autoDetect);
   };
 
-  const currentLang = languages.find((lang) => lang.code === currentLanguage);
+  const currentLang = languages.find((lang) => lang.code === language);
 
   return (
     <TooltipProvider>
@@ -75,27 +65,25 @@ export function LanguageSelector() {
             </DropdownMenuTrigger>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Select language</p>
+            <p>{t("nav.settings")}</p>
           </TooltipContent>
         </Tooltip>
         <DropdownMenuContent align="end" className="w-56">
-          <DropdownMenuLabel>Language</DropdownMenuLabel>
+          <DropdownMenuLabel>{t("nav.settings")}</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {languages.map((language) => (
+          {languages.map((lang) => (
             <DropdownMenuItem
-              key={language.code}
-              onClick={() => handleLanguageChange(language.code)}
+              key={lang.code}
+              onClick={() => handleLanguageChange(lang.code)}
               className="flex items-center justify-between"
             >
               <div className="flex flex-col">
-                <span>{language.native}</span>
+                <span>{lang.native}</span>
                 <span className="text-xs text-muted-foreground">
-                  {language.name}
+                  {lang.name}
                 </span>
               </div>
-              {currentLanguage === language.code && (
-                <Check className="h-4 w-4" />
-              )}
+              {language === lang.code && <Check className="h-4 w-4" />}
             </DropdownMenuItem>
           ))}
           <DropdownMenuSeparator />
@@ -103,7 +91,7 @@ export function LanguageSelector() {
             onClick={handleAutoDetectToggle}
             className="flex items-center justify-between"
           >
-            <span>Detect automatically</span>
+            <span>{t("language.autoDetect")}</span>
             {autoDetect && <Check className="h-4 w-4" />}
           </DropdownMenuItem>
         </DropdownMenuContent>

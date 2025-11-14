@@ -1,0 +1,33 @@
+{
+  "app": {
+    "name": "Multi-Agent KI-Assistent",
+    "description": "Intelligentes Assistentensystem für E-Commerce"
+  },
+  "nav": {
+    "chat": "Chat",
+    "knowledge": "Wissensbasis",
+    "analytics": "Analytics",
+    "documents": "Dokumente",
+    "settings": "Einstellungen"
+  },
+  "language": {
+    "pt-BR": "Portugiesisch (Brasilien)",
+    "en-US": "Englisch (USA)",
+    "es-ES": "Spanisch",
+    "fr-FR": "Französisch",
+    "de-DE": "Deutsch",
+    "autoDetect": "Automatisch erkennen"
+  },
+  "button": {
+    "send": "Senden",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "close": "Schließen"
+  },
+  "error": {
+    "generic": "Ein Fehler ist aufgetreten",
+    "network": "Verbindungsfehler"
+  },
+  "loading": "Lädt..."
+}
+

@@ -1,0 +1,38 @@
+{
+  "input": {
+    "placeholder": "Tapez votre message...",
+    "upload": "Joindre un fichier"
+  },
+  "message": {
+    "sending": "Envoi en cours...",
+    "sent": "Envoyé",
+    "error": "Erreur lors de l'envoi"
+  },
+  "agent": {
+    "knowledge": "Knowledge",
+    "analytics": "Analytics",
+    "commerce": "Commerce",
+    "triage": "Triage"
+  },
+  "metadata": {
+    "show": "Afficher les métadonnées",
+    "hide": "Masquer les métadonnées"
+  },
+  "citation": {
+    "source": "Source",
+    "document": "Document",
+    "page": "Page",
+    "similarity": "Similarité"
+  },
+  "sql": {
+    "copy": "Copier SQL",
+    "execute": "Exécuter à nouveau"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "metadata": "Affichage des Métadonnées",
+    "formatting": "Formatage",
+    "behavior": "Comportement"
+  }
+}
+
