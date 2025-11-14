@@ -27,6 +27,7 @@ Usage
 import logging
 from typing import Any
 
+from app.config.exceptions import AppBaseException
 from app.contracts.answer import Answer
 from app.graph.state import GraphState
 
@@ -192,13 +193,6 @@ async def analytics_node(state: GraphState) -> GraphState:
 
             # Process state
             updated_state = await agent.process(state)
-
-            # Store SQL in state for interrupt (if present in response)
-            if updated_state.get("agent_response"):
-                sql_metadata = updated_state["agent_response"].sql_metadata
-                if sql_metadata and sql_metadata.sql:
-                    updated_state["sql"] = sql_metadata.sql
-                    updated_state["agent"] = "analytics"
 
             logger.info(
                 "Analytics node completed",
