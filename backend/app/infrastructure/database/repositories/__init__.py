@@ -22,6 +22,10 @@ Usage
   >>> chunks = await repo.get_chunks_by_embedding(embedding, top_k=10)
 """
 
+from app.infrastructure.database.repositories.analytics_repo import (
+    AnalyticsRepository,
+    PostgreSQLAnalyticsRepository,
+)
 from app.infrastructure.database.repositories.knowledge_repo import (
     KnowledgeRepository,
     PostgreSQLKnowledgeRepository,
@@ -30,5 +34,7 @@ from app.infrastructure.database.repositories.knowledge_repo import (
 __all__ = [
     "KnowledgeRepository",
     "PostgreSQLKnowledgeRepository",
+    "AnalyticsRepository",
+    "PostgreSQLAnalyticsRepository",
 ]
 
