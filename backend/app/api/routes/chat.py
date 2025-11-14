@@ -465,6 +465,7 @@ async def get_history(
         thread_id=thread_id,
         messages=formatted_messages,
         total=total,
+        limit=limit,
     )
 
 
