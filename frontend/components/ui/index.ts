@@ -48,4 +48,12 @@ export {
 } from "./tooltip";
 export { ScrollArea, ScrollBar } from "./scroll-area";
 export { Separator } from "./separator";
+export {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "./accordion";
+export { Switch } from "./switch";
+export { Label } from "./label";
 
