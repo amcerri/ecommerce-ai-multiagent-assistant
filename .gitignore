@@ -15,8 +15,10 @@ downloads/
 eggs/
 .eggs/
 # Python lib directories (but not frontend/lib/)
-lib/
-!frontend/lib/
+# Ignore lib/ at root and in backend, but allow frontend/lib/
+/lib/
+/backend/lib/
+/backend/**/lib/
 lib64/
 parts/
 sdist/
