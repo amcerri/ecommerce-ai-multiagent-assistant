@@ -22,11 +22,8 @@ Usage
 """
 
 from app.api.routes.chat import chat_router
-
-# Documents and health routers will be created in Batch 20
-# For now, we'll export None to avoid import errors
-documents_router = None  # type: ignore
-health_router = None  # type: ignore
+from app.api.routes.documents import documents_router
+from app.api.routes.health import health_router
 
 __all__ = [
     "chat_router",

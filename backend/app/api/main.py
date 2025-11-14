@@ -276,26 +276,9 @@ async def general_exception_handler(request: Request, exc: Exception) -> Respons
 
 
 # Register routes
-from app.api.routes import chat
+from app.api.routes import chat, documents, health
 
 app.include_router(chat.chat_router, prefix="/api/v1", tags=["chat"])
-
-# Documents and health routes will be created in Batch 20
-# For now, create stub routes
-from fastapi import APIRouter
-
-stub_documents = APIRouter()
-
-@stub_documents.get("/documents")
-async def stub_documents_endpoint() -> Dict[str, str]:
-    return {"message": "Document routes will be implemented in Batch 20"}
-
-stub_health = APIRouter()
-
-@stub_health.get("/health")
-async def stub_health_endpoint() -> Dict[str, str]:
-    return {"status": "ok"}
-
-app.include_router(stub_documents, prefix="/api/v1", tags=["documents"])
-app.include_router(stub_health, prefix="/api/v1", tags=["health"])
+app.include_router(documents.documents_router, prefix="/api/v1", tags=["documents"])
+app.include_router(health.health_router, prefix="/api/v1", tags=["health"])
 
