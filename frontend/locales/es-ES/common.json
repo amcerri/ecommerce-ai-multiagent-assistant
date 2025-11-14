@@ -1,0 +1,33 @@
+{
+  "app": {
+    "name": "Asistente IA Multi-Agente",
+    "description": "Sistema de asistente inteligente para comercio electrónico"
+  },
+  "nav": {
+    "chat": "Chat",
+    "knowledge": "Base de Conocimiento",
+    "analytics": "Analytics",
+    "documents": "Documentos",
+    "settings": "Configuración"
+  },
+  "language": {
+    "pt-BR": "Portugués (Brasil)",
+    "en-US": "Inglés (EE. UU.)",
+    "es-ES": "Español",
+    "fr-FR": "Francés",
+    "de-DE": "Alemán",
+    "autoDetect": "Detectar automáticamente"
+  },
+  "button": {
+    "send": "Enviar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "close": "Cerrar"
+  },
+  "error": {
+    "generic": "Ocurrió un error",
+    "network": "Error de conexión"
+  },
+  "loading": "Cargando..."
+}
+

@@ -31,7 +31,7 @@ yarn-error.log*
 
 # TypeScript
 *.tsbuildinfo
-next-env.d.ts
+# Note: next-env.d.ts should be tracked (required by Next.js TypeScript)
 
 # IDE
 .idea/
