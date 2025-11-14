@@ -30,9 +30,19 @@ from app.api.schemas.chat import (
     ChatResponse,
 )
 
+# Document schemas (stubs for Batch 20, will be fully implemented in Batch 21)
+from app.api.schemas.documents import (
+    DocumentListResponse,
+    DocumentResponse,
+    DocumentUploadRequest,
+)
+
 __all__ = [
     "ChatRequest",
     "ChatResponse",
     "ChatHistoryResponse",
+    "DocumentUploadRequest",
+    "DocumentResponse",
+    "DocumentListResponse",
 ]
 
