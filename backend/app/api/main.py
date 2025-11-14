@@ -36,17 +36,8 @@ from app.config.settings import get_settings
 
 logger = logging.getLogger(__name__)
 
-# Import routes (will be created in Batch 19/20)
-# For now, we'll create stub routers to avoid import errors
-try:
-    from app.api.routes import chat, documents, health
-except ImportError:
-    # Stub routers if routes not yet created
-    from fastapi import APIRouter
-
-    chat = APIRouter()
-    documents = APIRouter()
-    health = APIRouter()
+# Import routes
+from app.api.routes import chat
 
 
 # Create FastAPI application
@@ -285,47 +276,26 @@ async def general_exception_handler(request: Request, exc: Exception) -> Respons
 
 
 # Register routes
-# Note: Routes will be created in Batch 19/20
-# For now, we'll create stub routes to avoid errors
-try:
-    app.include_router(chat.router, prefix="/api/v1", tags=["chat"])
-except AttributeError:
-    # If router doesn't exist, create stub
-    from fastapi import APIRouter
+from app.api.routes import chat
 
-    stub_router = APIRouter()
+app.include_router(chat.chat_router, prefix="/api/v1", tags=["chat"])
 
-    @stub_router.get("/chat")
-    async def stub_chat() -> Dict[str, str]:
-        return {"message": "Chat routes will be implemented in Batch 19"}
+# Documents and health routes will be created in Batch 20
+# For now, create stub routes
+from fastapi import APIRouter
 
-    app.include_router(stub_router, prefix="/api/v1/chat", tags=["chat"])
+stub_documents = APIRouter()
 
-try:
-    app.include_router(documents.router, prefix="/api/v1", tags=["documents"])
-except AttributeError:
-    # If router doesn't exist, create stub
-    from fastapi import APIRouter
+@stub_documents.get("/documents")
+async def stub_documents_endpoint() -> Dict[str, str]:
+    return {"message": "Document routes will be implemented in Batch 20"}
 
-    stub_router = APIRouter()
+stub_health = APIRouter()
 
-    @stub_router.get("/documents")
-    async def stub_documents() -> Dict[str, str]:
-        return {"message": "Document routes will be implemented in Batch 20"}
+@stub_health.get("/health")
+async def stub_health_endpoint() -> Dict[str, str]:
+    return {"status": "ok"}
 
-    app.include_router(stub_router, prefix="/api/v1/documents", tags=["documents"])
-
-try:
-    app.include_router(health.router, prefix="/api/v1", tags=["health"])
-except AttributeError:
-    # If router doesn't exist, create stub
-    from fastapi import APIRouter
-
-    stub_router = APIRouter()
-
-    @stub_router.get("/health")
-    async def stub_health() -> Dict[str, str]:
-        return {"status": "ok"}
-
-    app.include_router(stub_router, prefix="/api/v1/health", tags=["health"])
+app.include_router(stub_documents, prefix="/api/v1", tags=["documents"])
+app.include_router(stub_health, prefix="/api/v1", tags=["health"])
 
