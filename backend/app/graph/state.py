@@ -59,6 +59,8 @@ class GraphState(TypedDict, total=False):
         confidence_score: Confidence score from extraction (optional).
         response_type: Response type from triage agent (optional).
         suggestions: Suggestions from triage agent (optional).
+        sql: SQL query for approval (optional, for analytics agent interrupts).
+        agent: Current agent name (optional, for interrupts).
     """
 
     # Required fields
@@ -85,4 +87,8 @@ class GraphState(TypedDict, total=False):
     # Triage agent specific fields
     response_type: Optional[str]
     suggestions: Optional[List[str]]
+
+    # Analytics agent specific fields (for interrupts)
+    sql: Optional[str]
+    agent: Optional[str]
 
