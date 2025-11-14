@@ -28,13 +28,14 @@ Usage
 """
 
 import logging
-from typing import Any, Dict
+from typing import Any, Dict, Literal
 
 from fastapi import APIRouter, Depends
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.dependencies import DBDep
+from app.api.schemas.health import HealthResponse, LivenessResponse, ReadinessResponse
 from app.infrastructure.cache.cache_manager import get_cache_manager
 from app.infrastructure.llm import get_llm_client
 
@@ -44,22 +45,22 @@ logger = logging.getLogger(__name__)
 health_router = APIRouter(prefix="/health", tags=["health"])
 
 
-@health_router.get("/")
-async def health_check() -> Dict[str, str]:
+@health_router.get("/", response_model=HealthResponse)
+async def health_check() -> HealthResponse:
     """Basic health check.
 
     Returns basic status. Always returns "ok" if endpoint responds.
 
     Returns:
-        JSON with status: "ok".
+        HealthResponse with status: "ok".
     """
-    return {"status": "ok"}
+    return HealthResponse(status="ok")
 
 
-@health_router.get("/ready")
+@health_router.get("/ready", response_model=ReadinessResponse)
 async def readiness_check(
     db: DBDep,
-) -> Dict[str, Any]:
+) -> ReadinessResponse:
     """Readiness check.
 
     Verifies that all critical dependencies are available and working.
@@ -69,9 +70,9 @@ async def readiness_check(
         db: Database session.
 
     Returns:
-        JSON with status and individual check results.
+        ReadinessResponse with status and individual check results.
     """
-    checks: Dict[str, str] = {}
+    checks: Dict[str, Literal["ok", "error", "optional"]] = {}
     all_ready = True
 
     # Check database
@@ -109,22 +110,22 @@ async def readiness_check(
         checks["llm"] = "error"
         all_ready = False
 
-    status = "ready" if all_ready else "not_ready"
+    status: Literal["ready", "not_ready"] = "ready" if all_ready else "not_ready"
 
-    return {
-        "status": status,
-        "checks": checks,
-    }
+    return ReadinessResponse(
+        status=status,
+        checks=checks,
+    )
 
 
-@health_router.get("/live")
-async def liveness_check() -> Dict[str, str]:
+@health_router.get("/live", response_model=LivenessResponse)
+async def liveness_check() -> LivenessResponse:
     """Liveness check.
 
     Verifies that the application is running. Always returns "alive" if endpoint responds.
 
     Returns:
-        JSON with status: "alive".
+        LivenessResponse with status: "alive".
     """
-    return {"status": "alive"}
+    return LivenessResponse(status="alive")
 

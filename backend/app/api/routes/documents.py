@@ -192,6 +192,8 @@ async def upload_document(
         if document.processing_metadata and document.processing_metadata.get("error"):
             status = "error"
 
+        from datetime import datetime
+
         response = DocumentResponse(
             document_id=document_id,
             filename=document.file_name,
@@ -201,8 +203,8 @@ async def upload_document(
             schema_definition=document.schema_definition,
             confidence_score=document.confidence_score,
             processing_metadata=document.processing_metadata,
-            created_at=document.created_at.isoformat() if document.created_at else None,
-            updated_at=document.updated_at.isoformat() if document.updated_at else None,
+            created_at=document.created_at if document.created_at else datetime.now(),
+            processed_at=document.updated_at if status == "processed" and document.updated_at else None,
         )
 
         logger.info(
@@ -261,6 +263,8 @@ async def get_document(
         if document.processing_metadata and document.processing_metadata.get("error"):
             status = "error"
 
+        from datetime import datetime
+
         # Create response
         response = DocumentResponse(
             document_id=str(document.id),
@@ -271,8 +275,8 @@ async def get_document(
             schema_definition=document.schema_definition,
             confidence_score=document.confidence_score,
             processing_metadata=document.processing_metadata,
-            created_at=document.created_at.isoformat() if document.created_at else None,
-            updated_at=document.updated_at.isoformat() if document.updated_at else None,
+            created_at=document.created_at if document.created_at else datetime.now(),
+            processed_at=document.updated_at if status == "processed" and document.updated_at else None,
         )
 
         return response
@@ -358,6 +362,8 @@ async def analyze_document(
         # Determine status
         status = "processed" if document.extracted_data and len(document.extracted_data) > 0 else "pending"
 
+        from datetime import datetime
+
         # Create response
         response = DocumentResponse(
             document_id=str(document.id),
@@ -368,8 +374,8 @@ async def analyze_document(
             schema_definition=document.schema_definition,
             confidence_score=document.confidence_score,
             processing_metadata=document.processing_metadata,
-            created_at=document.created_at.isoformat() if document.created_at else None,
-            updated_at=document.updated_at.isoformat() if document.updated_at else None,
+            created_at=document.created_at if document.created_at else datetime.now(),
+            processed_at=document.updated_at if status == "processed" and document.updated_at else None,
         )
 
         logger.info(f"Document re-analyzed: {document_id}")
@@ -526,6 +532,8 @@ async def list_documents(
         documents = result.scalars().all()
 
         # Format documents
+        from datetime import datetime
+
         formatted_documents = []
         for doc in documents:
             # Determine status
@@ -545,8 +553,8 @@ async def list_documents(
                     schema_definition=doc.schema_definition,
                     confidence_score=doc.confidence_score,
                     processing_metadata=doc.processing_metadata,
-                    created_at=doc.created_at.isoformat() if doc.created_at else None,
-                    updated_at=doc.updated_at.isoformat() if doc.updated_at else None,
+                    created_at=doc.created_at if doc.created_at else datetime.now(),
+                    processed_at=doc.updated_at if status == "processed" and doc.updated_at else None,
                 )
             )
 
