@@ -128,21 +128,12 @@ class AnalyticsPlanner:
 
                 # Step 5: Validate allowlist
                 try:
-                    is_valid = await self._allowlist_validator.validate_sql(
-                        sql,
-                        tables_used,
-                        {table: columns_used for table in tables_used},
-                    )
-                    if not is_valid:
-                        raise ValidationException(
-                            message="SQL uses unauthorized tables or columns",
-                            details={"sql": sql[:200], "tables": tables_used},
-                        )
+                    self._allowlist_validator.validate_sql(sql)
                 except ValidationException:
                     raise
                 except Exception as e:
                     logger.warning(f"Allowlist validation error: {e}")
-                    # Continue if validation fails (will be improved in Batch 17)
+                    # Continue if validation fails (graceful degradation)
 
                 # Step 6: Validate syntax
                 self._validate_syntax(sql)

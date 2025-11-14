@@ -50,19 +50,18 @@ async def router_node(state: GraphState) -> GraphState:
         Updated state with router_decision.
     """
     try:
-        from app.routing.router import Router
-        from app.infrastructure.llm import get_llm_client
+        from app.routing.router import get_router
 
-        # Get router instance (singleton or create new)
-        llm_client = get_llm_client()
-        router = Router(llm_client)
+        # Get router instance (singleton)
+        router = get_router()
 
         # Get query and language from state
         query = state.get("query", "")
         language = state.get("language", "pt-BR")
+        conversation_history = state.get("conversation_history")
 
         # Route query
-        router_decision = await router.route(query, language)
+        router_decision = await router.route(query, language, conversation_history)
 
         # Update state
         state["router_decision"] = router_decision
@@ -193,6 +192,13 @@ async def analytics_node(state: GraphState) -> GraphState:
 
             # Process state
             updated_state = await agent.process(state)
+
+            # Store SQL in state for interrupt (if present in response)
+            if updated_state.get("agent_response"):
+                sql_metadata = updated_state["agent_response"].sql_metadata
+                if sql_metadata and sql_metadata.sql:
+                    updated_state["sql"] = sql_metadata.sql
+                    updated_state["agent"] = "analytics"
 
             logger.info(
                 "Analytics node completed",
