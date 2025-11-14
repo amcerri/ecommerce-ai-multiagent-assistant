@@ -25,8 +25,10 @@ Usage
 
 # Allowlist validation
 from app.routing.allowlist import AllowlistValidator
+from app.routing.router import Router
 
 __all__ = [
     "AllowlistValidator",
+    "Router",
 ]
 
