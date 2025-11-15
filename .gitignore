@@ -68,11 +68,17 @@ logs/
 *.sqlite
 *.sqlite3
 
-# Data (except structure)
+# Data (ignore all files except .zip archives and .gitkeep)
 data/docs/*
 !data/docs/.gitkeep
+!data/docs/*.zip
+data/docs/*.pdf
+data/docs/*.csv
 data/raw/analytics/*
 !data/raw/analytics/.gitkeep
+!data/raw/analytics/*.zip
+data/raw/analytics/*.csv
+data/raw/analytics/*.pdf
 data/storage/*
 !data/storage/.gitkeep
 
